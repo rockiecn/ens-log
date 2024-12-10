@@ -178,22 +178,22 @@ func (g *Grabber) unpack(log types.Log, out interface{}) error {
 	// get all topics
 	indexed := g.IndexedMap[log.Topics[0]]
 
-	//logger.Info("event name: ", eventName)
+	logger.Debug("event name: ", eventName)
 
 	// parse data
 	err := g.ABI.UnpackIntoInterface(out, eventName, log.Data)
 	if err != nil {
 		return err
 	}
-	//logger.Info("unpack out(no topics):", out)
+	logger.Debug("unpack out(no topics):", out)
 
 	// parse topic
-	//logger.Info("parse topic")
+	logger.Debug("parse topic")
 	err = abi.ParseTopics(out, indexed, log.Topics[1:])
 	if err != nil {
 		return err
 	}
-	//logger.Info("unpack out(with topics):", out)
+	logger.Debug("unpack out(with topics):", out)
 
 	return nil
 }
