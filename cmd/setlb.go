@@ -18,7 +18,7 @@ var SetLBCmd = &cli.Command{
 	},
 	Action: func(cctx *cli.Context) error {
 		b := cctx.String("b")
-		i := utils.BytestoUint64([]byte(b))
+		i := utils.StrToUint64(b)
 		common.SetLocalBlock(i)
 		return nil
 	},

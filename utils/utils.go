@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"math/big"
+	"strconv"
 
 	badger "github.com/dgraph-io/badger/v3"
 )
@@ -16,6 +17,7 @@ type RECORD struct {
 	Name    string
 	Label   string
 	Owner   string
+	Cost    *big.Int
 	Expires *big.Int
 }
 
@@ -175,4 +177,15 @@ func BytestoUint64(b []byte) uint64 {
 
 	i := binary.LittleEndian.Uint64(bytes8)
 	return i
+}
+
+func StrToUint64(s string) uint64 {
+	u, err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		fmt.Printf("转换错误: %v\n", err)
+	} else {
+		fmt.Printf("转换后的 uint64 数值: %v\n", u)
+	}
+
+	return u
 }

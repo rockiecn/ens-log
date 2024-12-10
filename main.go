@@ -20,6 +20,7 @@ func main() {
 		cmd.SetLBCmd,
 		cmd.GetLBCmd,
 		cmd.IterCmd,
+		cmd.TestDBCmd,
 	}
 
 	app := &cli.App{

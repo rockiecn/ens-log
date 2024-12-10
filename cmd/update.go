@@ -1,20 +1,22 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/big"
 
 	"github.com/dgraph-io/badger"
+	"github.com/ethereum/go-ethereum/ethclient"
 	com "github.com/rockiecn/ens-log/common"
 	"github.com/rockiecn/ens-log/db"
-	"github.com/rockiecn/ens-log/grab"
+	"github.com/rockiecn/ens-log/grabber"
 	"github.com/rockiecn/ens-log/utils"
 	"github.com/urfave/cli/v2"
 )
 
 // 100 blocks each time
-const STEP uint64 = 10000
+const STEP uint64 = 5000
 
 // update local db
 var UpdateCmd = &cli.Command{
@@ -37,6 +39,28 @@ var UpdateCmd = &cli.Command{
 			log.Fatal(err)
 		}
 		defer sDB.Close()
+
+		// new grabber
+		fmt.Println("new grabber")
+		g, err := grabber.NewGrabber(com.Endpoint, com.ABI, com.Address, com.NameRegTopic)
+		if err != nil {
+			panic(err)
+		}
+
+		// connect chain
+		cli, err := ethclient.Dial(g.Endpoint)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// get current block number
+		ctx := context.Background()
+		com.ChainBlock, err = cli.BlockNumber(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println("current block number is: ", com.ChainBlock)
 
 		// update local db
 		for com.LocalBlock < com.ChainBlock {
@@ -68,12 +92,13 @@ var UpdateCmd = &cli.Command{
 				to.SetUint64(com.ChainBlock)
 			}
 
-			// end
+			// update end
 			if from.Cmp(to) >= 0 {
+				fmt.Println("grab end")
 				return nil
 			} else {
 				fmt.Printf("======== grabbing logs for block: %d to %d\n", from, to)
-				grab.GrabLogs(com.CLI, from, to, rDB, sDB)
+				g.GrabLogs(cli, from, to, rDB, sDB)
 			}
 		}
 

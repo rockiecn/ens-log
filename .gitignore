@@ -1,2 +1,3 @@
-badger_*
+badger*
 ens-log
+*.db
