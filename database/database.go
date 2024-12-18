@@ -108,7 +108,7 @@ func Open() {
 	fmt.Println("open db")
 
 	//打开数据库，如果不存在，则创建
-	db, err := sql.Open("sqlite3", "./test.db")
+	db, err := sql.Open("sqlite3", "./ens.db")
 	checkErr(err)
 
 	//创建表
