@@ -27,7 +27,8 @@ func TestDB() {
 				label VARCHAR(64) NULL,
 		        owner VARCHAR(64) NULL,
 				premium VARCHAR(64) NULL,
-				expires VARCHAR(64) NULL
+				expires VARCHAR(64) NULL,
+				VARCHAR(64) NULL,
 		    );
 		    `
 	db.Exec(sql_table)
@@ -120,7 +121,8 @@ func Open() {
 		label VARCHAR(64) NULL,
         owner VARCHAR(64) NULL,
 		basecost VARCHAR(64) NULL,
-		expires VARCHAR(64) NULL
+		expires VARCHAR(64) NULL,
+		balance VARCHAR(64) NULL
     );
     `
 
